@@ -1,8 +1,8 @@
 import Badge from '@/ui/components/Badge';
-import ButtonExpand, { SocialMenuItemProps } from '@/ui/components/ButtonExpand';
+import ButtonExpand, { type SocialLink } from '@/ui/components/ButtonExpand';
 import { IconBrandAdobe, IconBrandGithub, IconBrandLinkedin } from '@tabler/icons-react';
 
-const socialLinks: SocialMenuItemProps[] = [
+const socialLinks: SocialLink[] = [
     { delay: 0, href: 'https://github.com/ragaeeb', icon: IconBrandGithub, position: 'top' },
     { delay: 100, href: 'https://synonymous2.com/', icon: IconBrandAdobe, position: 'bottom-left' },
     { delay: 150, href: 'https://linkedin.com/in/ragaeeb', icon: IconBrandLinkedin, position: 'bottom-right' },
