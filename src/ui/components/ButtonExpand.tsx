@@ -1,79 +1,111 @@
-import type { ComponentType } from 'react';
+'use client';
 
-import { IconPlus } from '@tabler/icons-react';
+import { IconBrandAdobe, IconBrandGithub, IconBrandLinkedin, IconPlus } from '@tabler/icons-react';
 import Link from 'next/link';
+import { type ReactNode, useId, useState } from 'react';
+
+export type SocialIconId = 'agency' | 'github' | 'linkedin';
 
 export interface SocialLink {
     delay: number;
     href: string;
-    icon: ComponentType<{ className?: string }>;
+    icon: SocialIconId;
+    label: string;
     position: SocialPosition;
 }
 
-type SocialPosition = 'bottom' | 'bottom-left' | 'bottom-right' | 'left' | 'right' | 'top' | 'top-left' | 'top-right';
+type SocialPosition =
+    | 'bottom'
+    | 'bottom-left'
+    | 'bottom-right'
+    | 'left'
+    | 'right'
+    | 'top'
+    | 'top-left'
+    | 'top-right';
+
+const iconLookup: Record<SocialIconId, (props: { className?: string }) => ReactNode> = {
+    agency: (props) => <IconBrandAdobe {...props} />,
+    github: (props) => <IconBrandGithub {...props} />,
+    linkedin: (props) => <IconBrandLinkedin {...props} />,
+};
 
 const ButtonExpand = ({ links }: { links: SocialLink[] }) => {
+    const [open, setOpen] = useState(false);
+    const id = useId();
+
     return (
         <div className="relative flex items-center justify-center">
-            <input className="peer hidden" id="toggle" type="checkbox" />
-            <label
-                className="group relative z-10 flex size-[3.2rem] cursor-pointer items-center justify-center rounded-full border bg-black overflow-hidden duration-500 peer-checked:rotate-45 peer-checked:bg-red-500"
-                htmlFor="toggle"
+            <button
+                aria-controls={`${id}-links`}
+                aria-expanded={open}
+                aria-label={open ? 'Collapse social links' : 'Expand social links'}
+                className="group relative z-10 flex size-14 items-center justify-center overflow-hidden rounded-full border border-white/20 bg-black/80 text-white transition duration-500 hover:border-white/40 hover:bg-black data-[open=true]:rotate-45 data-[open=true]:bg-red-500"
+                data-open={open}
+                onClick={() => setOpen((previous) => !previous)}
+                type="button"
             >
-                <IconPlus className="text-white relative z-10" />
-                <span className="absolute inset-0 overflow-hidden rounded-full">
-                    <span className="absolute left-0 aspect-square w-full origin-center translate-x-full rounded-full bg-blue-500 transition-all duration-500 group-hover:-translate-x-0 group-hover:scale-150"></span>
+                <IconPlus className="relative z-10 size-5" />
+                <span aria-hidden className="absolute inset-0 overflow-hidden rounded-full">
+                    <span className="absolute left-0 aspect-square w-full origin-center translate-x-full rounded-full bg-sky-400/70 transition-all duration-500 group-hover:-translate-x-0 group-hover:scale-150" />
                 </span>
-            </label>
+            </button>
 
-            {links?.map((link, index) => {
-                const { delay, href, icon: Icon, position } = link;
-                let positionClass = '';
+            <ul className="contents" id={`${id}-links`}>
+                {links.map((link) => {
+                    const { delay, href, icon, label, position } = link;
+                    let positionClass = '';
 
-                // Map positions to transform classes
-                switch (position) {
-                    case 'bottom':
-                        positionClass = 'peer-checked:translate-y-16';
-                        break;
-                    case 'bottom-left':
-                        positionClass = 'peer-checked:-translate-x-16 peer-checked:translate-y-16';
-                        break;
-                    case 'bottom-right':
-                        positionClass = 'peer-checked:translate-x-16 peer-checked:translate-y-16';
-                        break;
-                    case 'left':
-                        positionClass = 'peer-checked:-translate-x-16';
-                        break;
-                    case 'right':
-                        positionClass = 'peer-checked:translate-x-16';
-                        break;
-                    case 'top':
-                        positionClass = 'peer-checked:-translate-y-16';
-                        break;
-                    case 'top-left':
-                        positionClass = 'peer-checked:-translate-x-16 peer-checked:-translate-y-16';
-                        break;
-                    case 'top-right':
-                        positionClass = 'peer-checked:translate-x-16 peer-checked:-translate-y-16';
-                        break;
-                    default:
-                        positionClass = '';
-                }
+                    switch (position) {
+                        case 'bottom':
+                            positionClass = 'data-[open=true]:translate-y-16';
+                            break;
+                        case 'bottom-left':
+                            positionClass =
+                                'data-[open=true]:-translate-x-16 data-[open=true]:translate-y-16';
+                            break;
+                        case 'bottom-right':
+                            positionClass =
+                                'data-[open=true]:translate-x-16 data-[open=true]:translate-y-16';
+                            break;
+                        case 'left':
+                            positionClass = 'data-[open=true]:-translate-x-16';
+                            break;
+                        case 'right':
+                            positionClass = 'data-[open=true]:translate-x-16';
+                            break;
+                        case 'top':
+                            positionClass = 'data-[open=true]:-translate-y-16';
+                            break;
+                        case 'top-left':
+                            positionClass =
+                                'data-[open=true]:-translate-x-16 data-[open=true]:-translate-y-16';
+                            break;
+                        case 'top-right':
+                            positionClass =
+                                'data-[open=true]:translate-x-16 data-[open=true]:-translate-y-16';
+                            break;
+                        default:
+                            positionClass = '';
+                    }
 
-                return (
-                    <Link
-                        className={`absolute flex size-12 cursor-pointer items-center justify-center rounded-full border 
-                        bg-[#000000a2] duration-500 hover:scale-110 hover:bg-[#0000] opacity-0
-                        peer-checked:opacity-100 ${positionClass} peer-checked:delay-[${delay}ms]`}
-                        href={href}
-                        key={index}
-                        rel="noopener noreferrer"
-                        target="_blank"
-                    >
-                        <Icon className="text-white" />
-                    </Link>
-                );
-            })}
+                    return (
+                        <li key={href}>
+                            <Link
+                                aria-label={label}
+                                className={`absolute flex size-12 items-center justify-center rounded-full border border-white/10 bg-black/60 text-white opacity-0 backdrop-blur-sm transition duration-500 hover:scale-110 hover:border-white/40 hover:bg-black/80 data-[open=true]:opacity-100 ${positionClass}`}
+                                data-open={open}
+                                href={href}
+                                rel="noopener noreferrer"
+                                style={{ transitionDelay: open ? `${delay}ms` : '0ms' }}
+                                target="_blank"
+                            >
+                                {iconLookup[icon]({ className: 'size-5' })}
+                            </Link>
+                        </li>
+                    );
+                })}
+            </ul>
         </div>
     );
 };

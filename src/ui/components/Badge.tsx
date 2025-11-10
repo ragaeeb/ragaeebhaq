@@ -13,7 +13,10 @@ useTexture.preload('/assets/images/tag_texture.webp');
 
 const Badge = () => {
     return (
-        <Canvas camera={{ fov: 25, position: [0, 0, 13] }} style={{ backgroundColor: 'transparent' }}>
+        <Canvas
+            camera={{ fov: 25, position: [0, 0, 13] }}
+            style={{ backgroundColor: 'transparent' }}
+        >
             <ambientLight intensity={Math.PI} />
             <Physics debug={false} gravity={[0, -40, 0]} interpolate timeStep={1 / 60}>
                 <Band />
