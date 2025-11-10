@@ -15,7 +15,7 @@ const Badge = () => {
     return (
         <Canvas
             camera={{ fov: 25, position: [0, 0, 13] }}
-            style={{ backgroundColor: 'transparent' }}
+            style={{ backgroundColor: 'transparent', height: '100%', width: '100%' }}
         >
             <ambientLight intensity={Math.PI} />
             <Physics debug={false} gravity={[0, -40, 0]} interpolate timeStep={1 / 60}>

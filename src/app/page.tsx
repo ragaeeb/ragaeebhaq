@@ -59,9 +59,7 @@ export default function Home() {
     return (
         <div className="flex min-h-screen flex-col bg-slate-950 text-white">
             <section className="relative flex h-screen w-full items-center justify-center overflow-hidden">
-                <div className="absolute inset-0">
-                    <BadgeClient />
-                </div>
+                <BadgeClient className="absolute inset-0" />
 
                 <div className="pointer-events-none absolute bottom-1/6 left-1/2 -translate-x-1/2">
                     <div className="pointer-events-auto">
@@ -120,7 +118,7 @@ export default function Home() {
                     <div className="relative">
                         <div className="absolute inset-0 -z-10 rounded-[3rem] bg-gradient-to-br from-sky-500/25 via-purple-500/10 to-transparent blur-3xl" />
                         <div className="relative aspect-[4/3] overflow-hidden rounded-[2.5rem] border border-white/10 bg-black/50 shadow-[0_25px_80px_rgba(15,23,42,0.65)]">
-                            <BadgeClient />
+                            <BadgeClient className="size-full" />
                         </div>
                     </div>
                 </section>

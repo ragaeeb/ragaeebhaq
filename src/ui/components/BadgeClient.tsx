@@ -12,8 +12,14 @@ const InteractiveBadge = dynamic(() => import('./Badge'), {
     ssr: false,
 });
 
-const BadgeClient = () => {
-    return <InteractiveBadge />;
+const BadgeClient = ({ className }: { className?: string }) => {
+    const combinedClassName = className ? `h-full w-full ${className}` : 'h-full w-full';
+
+    return (
+        <div className={combinedClassName}>
+            <InteractiveBadge />
+        </div>
+    );
 };
 
 export default BadgeClient;
