@@ -1,19 +1,9 @@
 import { projects } from '@/data/projects';
+import BadgeClient from '@/ui/components/BadgeClient';
 import ButtonExpand, { type SocialLink } from '@/ui/components/ButtonExpand';
 import ProjectCard from '@/ui/components/ProjectCard';
 import { IconArrowUpRight } from '@tabler/icons-react';
-import dynamic from 'next/dynamic';
 import Link from 'next/link';
-
-const Badge = dynamic(() => import('@/ui/components/Badge'), {
-    loading: () => (
-        <div className="flex h-full w-full items-center justify-center rounded-[2.5rem] border border-white/10 bg-black/40">
-            <div className="size-12 animate-spin rounded-full border-2 border-white/20 border-t-white/70" />
-            <span className="sr-only">Loading interactive badge</span>
-        </div>
-    ),
-    ssr: false,
-});
 
 const socialLinks: SocialLink[] = [
     {
@@ -115,7 +105,7 @@ export default function Home() {
                 <div className="relative">
                     <div className="absolute inset-0 -z-10 rounded-[3rem] bg-gradient-to-br from-sky-500/25 via-purple-500/10 to-transparent blur-3xl" />
                     <div className="relative aspect-[4/3] overflow-hidden rounded-[2.5rem] border border-white/10 bg-black/50 shadow-[0_25px_80px_rgba(15,23,42,0.65)]">
-                        <Badge />
+                        <BadgeClient />
                     </div>
                 </div>
             </section>

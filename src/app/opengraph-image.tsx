@@ -15,7 +15,8 @@ export default async function OpenGraphImage() {
     return new ImageResponse(
         <div
             style={{
-                background: `radial-gradient(circle at 20% 20%, ${accent}40, transparent 55%), radial-gradient(circle at 80% 80%, #a855f740, transparent 60%), ${slate}`,
+                backgroundColor: slate,
+                backgroundImage: `radial-gradient(circle at 20% 20%, ${accent}40, transparent 55%), radial-gradient(circle at 80% 80%, #a855f740, transparent 60%)`,
                 color: 'white',
                 display: 'flex',
                 flexDirection: 'column',
@@ -44,7 +45,7 @@ export default async function OpenGraphImage() {
                 </span>
             </div>
 
-            <div style={{ marginTop: 'auto' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 24, marginTop: 'auto' }}>
                 <h1 style={{ fontSize: 88, fontWeight: 700, lineHeight: 1.05, margin: 0 }}>
                     {siteName}
                 </h1>
@@ -52,7 +53,7 @@ export default async function OpenGraphImage() {
                     style={{
                         color: 'rgba(255,255,255,0.75)',
                         fontSize: 32,
-                        marginTop: 24,
+                        margin: 0,
                         maxWidth: 780,
                     }}
                 >
