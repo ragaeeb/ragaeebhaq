@@ -5,13 +5,13 @@ import { extend, useFrame } from '@react-three/fiber';
 import {
     BallCollider,
     CuboidCollider,
-    RapierRigidBody,
+    type RapierRigidBody,
     RigidBody,
     useRopeJoint,
     useSphericalJoint,
 } from '@react-three/rapier';
 import { MeshLineGeometry, MeshLineMaterial } from 'meshline';
-import { RefObject, useEffect, useRef, useState } from 'react';
+import { type RefObject, useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
 
 extend({ MeshLineGeometry, MeshLineMaterial });
@@ -64,9 +64,12 @@ export default function Band({ maxSpeed = 50, minSpeed = 10 }) {
     useEffect(() => {
         if (hovered) {
             document.body.style.cursor = dragged ? 'grabbing' : 'grab';
-            return () => void (document.body.style.cursor = 'auto');
+            return () => {
+                document.body.style.cursor = 'auto';
+            };
         }
-        return () => void (document.body.style.cursor = 'auto');
+
+        document.body.style.cursor = 'auto';
     }, [hovered, dragged]);
 
     useFrame((state, delta) => {

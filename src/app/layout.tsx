@@ -1,6 +1,5 @@
-import type { Metadata } from 'next';
-
 import { Geist, Geist_Mono } from 'next/font/google';
+import { siteMetadata, siteViewport } from '@/seo/site';
 
 import './globals.css';
 
@@ -14,10 +13,7 @@ const geistMono = Geist_Mono({
     variable: '--font-geist-mono',
 });
 
-export const metadata: Metadata = {
-    description: 'Full Stack Staff Engineer',
-    title: 'Ragaeeb Haq',
-};
+export { siteMetadata as metadata, siteViewport as viewport };
 
 export default function RootLayout({
     children,
@@ -26,7 +22,9 @@ export default function RootLayout({
 }>) {
     return (
         <html lang="en">
-            <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>{children}</body>
+            <body className={`${geistSans.variable} ${geistMono.variable} bg-slate-950 text-slate-100 antialiased`}>
+                {children}
+            </body>
         </html>
     );
 }
