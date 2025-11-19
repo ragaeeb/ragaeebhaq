@@ -5,14 +5,13 @@ import { extend, useFrame } from '@react-three/fiber';
 import {
     BallCollider,
     CuboidCollider,
+    RapierRigidBody,
     RigidBody,
     useRopeJoint,
     useSphericalJoint,
 } from '@react-three/rapier';
-import type { RapierRigidBody } from '@react-three/rapier';
 import { MeshLineGeometry, MeshLineMaterial } from 'meshline';
-import { useEffect, useRef, useState } from 'react';
-import type { RefObject } from 'react';
+import { RefObject, useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
 
 extend({ MeshLineGeometry, MeshLineMaterial });
@@ -53,21 +52,9 @@ export default function Band({ maxSpeed = 50, minSpeed = 10 }) {
             ]),
     );
 
-    useRopeJoint(fixed as RefObject<RapierRigidBody>, j1 as RefObject<RapierRigidBody>, [
-        [0, 0, 0],
-        [0, 0, 0],
-        1,
-    ]);
-    useRopeJoint(j1 as RefObject<RapierRigidBody>, j2 as RefObject<RapierRigidBody>, [
-        [0, 0, 0],
-        [0, 0, 0],
-        1,
-    ]);
-    useRopeJoint(j2 as RefObject<RapierRigidBody>, j3 as RefObject<RapierRigidBody>, [
-        [0, 0, 0],
-        [0, 0, 0],
-        1,
-    ]);
+    useRopeJoint(fixed as RefObject<RapierRigidBody>, j1 as RefObject<RapierRigidBody>, [[0, 0, 0], [0, 0, 0], 1]);
+    useRopeJoint(j1 as RefObject<RapierRigidBody>, j2 as RefObject<RapierRigidBody>, [[0, 0, 0], [0, 0, 0], 1]);
+    useRopeJoint(j2 as RefObject<RapierRigidBody>, j3 as RefObject<RapierRigidBody>, [[0, 0, 0], [0, 0, 0], 1]);
 
     useSphericalJoint(j3 as RefObject<RapierRigidBody>, card as RefObject<RapierRigidBody>, [
         [0, 0, 0],
@@ -75,37 +62,21 @@ export default function Band({ maxSpeed = 50, minSpeed = 10 }) {
     ]);
 
     useEffect(() => {
-        const resetCursor = () => {
-            document.body.style.cursor = 'auto';
-        };
-
         if (hovered) {
             document.body.style.cursor = dragged ? 'grabbing' : 'grab';
-            return resetCursor;
+            return () => void (document.body.style.cursor = 'auto');
         }
-
-        resetCursor();
-        return resetCursor;
+        return () => void (document.body.style.cursor = 'auto');
     }, [hovered, dragged]);
 
     useFrame((state, delta) => {
-        if (
-            !fixed.current ||
-            !j1.current ||
-            !j2.current ||
-            !j3.current ||
-            !band.current ||
-            !card.current
-        )
-            return;
+        if (!fixed.current || !j1.current || !j2.current || !j3.current || !band.current || !card.current) return;
 
         if (dragged) {
             vec.set(state.pointer.x, state.pointer.y, 0.5).unproject(state.camera);
             dir.copy(vec).sub(state.camera.position).normalize();
             vec.add(dir.multiplyScalar(state.camera.position.length()));
-            for (const ref of [card, j1, j2, j3, fixed]) {
-                ref.current?.wakeUp();
-            }
+            [card, j1, j2, j3, fixed].forEach((ref) => ref.current?.wakeUp());
             card.current?.setNextKinematicTranslation({
                 x: vec.x - dragged.x,
                 y: vec.y - dragged.y,
@@ -118,10 +89,7 @@ export default function Band({ maxSpeed = 50, minSpeed = 10 }) {
                 if (ref.current) {
                     const lerped = new THREE.Vector3().copy(ref.current.translation());
 
-                    const clampedDistance = Math.max(
-                        0.1,
-                        Math.min(1, lerped.distanceTo(ref.current.translation())),
-                    );
+                    const clampedDistance = Math.max(0.1, Math.min(1, lerped.distanceTo(ref.current.translation())));
 
                     return lerped.lerp(
                         ref.current.translation(),
@@ -167,23 +135,14 @@ export default function Band({ maxSpeed = 50, minSpeed = 10 }) {
                 >
                     <CuboidCollider args={[0.8, 1.125, 0.01]} />
                     <group
-                        onPointerDown={(event) => {
-                            (event.target as Element)?.setPointerCapture(event.pointerId);
-
-                            if (card.current) {
-                                drag(
-                                    new THREE.Vector3()
-                                        .copy(event.point)
-                                        .sub(vec.copy(card.current.translation())),
-                                );
-                            }
-                        }}
+                        onPointerDown={(e) => (
+                            (e.target as Element)?.setPointerCapture(e.pointerId),
+                            card.current &&
+                                drag(new THREE.Vector3().copy(e.point).sub(vec.copy(card.current.translation())))
+                        )}
                         onPointerOut={() => hover(false)}
                         onPointerOver={() => hover(true)}
-                        onPointerUp={(event) => {
-                            (event.target as Element)?.releasePointerCapture(event.pointerId);
-                            drag(false);
-                        }}
+                        onPointerUp={(e) => ((e.target as Element)?.releasePointerCapture(e.pointerId), drag(false))}
                         position={[0, -1.25, -0.05]}
                         scale={2.25}
                     >
