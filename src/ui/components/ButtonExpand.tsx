@@ -1,7 +1,6 @@
-import type { ComponentType } from 'react';
-
 import { IconPlus } from '@tabler/icons-react';
 import Link from 'next/link';
+import type { ComponentType } from 'react';
 
 export interface SocialLink {
     delay: number;

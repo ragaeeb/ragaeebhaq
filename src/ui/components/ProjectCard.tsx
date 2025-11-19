@@ -1,7 +1,6 @@
-import type { Project } from '@/data/projects';
-
 import { IconArrowUpRight, IconBrandGithub } from '@tabler/icons-react';
 import Link from 'next/link';
+import type { Project } from '@/data/projects';
 
 const dateFormatter = new Intl.DateTimeFormat('en-US', {
     day: 'numeric',
@@ -25,9 +24,7 @@ const ProjectCard = ({ project }: ProjectCardProps) => {
                         <span aria-hidden className="text-3xl">
                             {icon}
                         </span>
-                        <h3 className="text-xl font-semibold tracking-tight text-white sm:text-2xl">
-                            {name}
-                        </h3>
+                        <h3 className="text-xl font-semibold tracking-tight text-white sm:text-2xl">{name}</h3>
                         <p className="text-sm text-white/70 sm:text-base">{description}</p>
                     </div>
                     <span className="whitespace-nowrap rounded-full border border-white/10 px-3 py-1 text-xs font-medium uppercase tracking-[0.15em] text-white/60">
@@ -38,10 +35,7 @@ const ProjectCard = ({ project }: ProjectCardProps) => {
                 <ul className="flex flex-col gap-3 text-sm text-white/80">
                     {highlights.map((highlight) => (
                         <li className="flex gap-2" key={highlight}>
-                            <span
-                                aria-hidden
-                                className="mt-1 block size-1.5 rounded-full bg-sky-200/80"
-                            />
+                            <span aria-hidden className="mt-1 block size-1.5 rounded-full bg-sky-200/80" />
                             <span>{highlight}</span>
                         </li>
                     ))}
